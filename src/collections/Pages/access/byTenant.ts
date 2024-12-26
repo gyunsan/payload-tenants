@@ -4,13 +4,13 @@ import { parseCookies } from 'payload'
 
 import { isSuperAdmin } from '../../../access/isSuperAdmin'
 import { getTenantAccessIDs } from '../../../utilities/getTenantAccessIDs'
+import { extractID } from '../../../utilities/extractID'
 
 export const filterByTenantRead: Access = (args) => {
   const req = args.req
   const cookies = parseCookies(req.headers)
   const superAdmin = isSuperAdmin(args)
   const selectedTenant = cookies.get('payload-tenant')
-
   const tenantAccessIDs = getTenantAccessIDs(req.user)
 
   // First check for manually selected tenant from cookies
@@ -25,7 +25,7 @@ export const filterByTenantRead: Access = (args) => {
       }
     }
 
-    const hasTenantAccess = tenantAccessIDs.some((id) => id === selectedTenant)
+    const hasTenantAccess = tenantAccessIDs.some((id) => String(extractID(id)) === selectedTenant)
 
     // If NOT super admin,
     // give them access only if they have access to tenant ID set in cookie
@@ -84,7 +84,8 @@ export const canMutatePage: Access = (args) => {
       }
       if (
         accessRow &&
-        accessRow.tenant === selectedTenant &&
+        accessRow.tenant &&
+        String(extractID(accessRow.tenant)) === selectedTenant &&
         accessRow.roles?.includes('tenant-admin')
       ) {
         return true

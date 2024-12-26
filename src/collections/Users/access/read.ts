@@ -5,6 +5,7 @@ import { parseCookies } from 'payload'
 
 import { isSuperAdmin } from '../../../access/isSuperAdmin'
 import { getTenantAdminTenantAccessIDs } from '../../../utilities/getTenantAccessIDs'
+import { extractID } from '../../../utilities/extractID'
 
 export const readAccess: Access<User> = (args) => {
   const { req } = args
@@ -28,7 +29,7 @@ export const readAccess: Access<User> = (args) => {
     }
 
     const tenantAccessIDs = getTenantAdminTenantAccessIDs(req.user)
-    const hasTenantAccess = tenantAccessIDs.some((id) => id === selectedTenant)
+    const hasTenantAccess = tenantAccessIDs.some((id) => String(extractID(id)) === selectedTenant)
 
     // If NOT super admin,
     // give them access only if they have access to tenant ID set in cookie

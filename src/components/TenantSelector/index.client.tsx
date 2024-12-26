@@ -7,6 +7,8 @@ import { SelectInput, useAuth } from '@payloadcms/ui'
 import * as qs from 'qs-esm'
 import React from 'react'
 
+import { extractID } from '@/utilities/extractID'
+
 import type { Tenant, User } from '../../payload-types'
 
 import './index.scss'
@@ -22,7 +24,10 @@ export const TenantSelector = ({ initialCookie }: { initialCookie?: string }) =>
         if (typeof tenant === 'string') {
           return tenant
         }
-        return tenant.id
+        if (typeof tenant === 'number') {
+          return String(tenant)
+        }
+        return String(extractID(tenant.id))
       }
     }) || []
 

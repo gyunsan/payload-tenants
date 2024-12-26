@@ -1,7 +1,9 @@
 import type { BaseListFilter } from 'payload'
+import type { Tenant } from '@/payload-types'
 
 import { isSuperAdmin } from '@/access/isSuperAdmin'
 import { getTenantAccessIDs } from '@/utilities/getTenantAccessIDs'
+import { extractID } from '@/utilities/extractID'
 import { parseCookies } from 'payload'
 
 export const baseListFilter: BaseListFilter = (args) => {
@@ -12,7 +14,7 @@ export const baseListFilter: BaseListFilter = (args) => {
   const tenantAccessIDs = getTenantAccessIDs(req.user)
 
   // if user is super admin or has access to the selected tenant
-  if (selectedTenant && (superAdmin || tenantAccessIDs.some((id) => id === selectedTenant))) {
+  if (selectedTenant && (superAdmin || tenantAccessIDs.some((id) => String(extractID(id)) === selectedTenant))) {
     // set a base filter for the list view
     return {
       tenant: {

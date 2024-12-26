@@ -4,6 +4,7 @@ import { parseCookies } from 'payload'
 
 import { isSuperAdmin } from '../../../access/isSuperAdmin'
 import { getTenantAccessIDs } from '../../../utilities/getTenantAccessIDs'
+import { extractID } from '../../../utilities/extractID'
 
 export const readAccess: Access = (args) => {
   const req = args.req
@@ -19,7 +20,7 @@ export const readAccess: Access = (args) => {
   }
 
   // If it's a super admin or has access to the selected tenant
-  if (selectedTenant && (superAdmin || tenantAccessIDs.some((id) => id === selectedTenant))) {
+  if (selectedTenant && (superAdmin || tenantAccessIDs.some((id) => String(extractID(id)) === selectedTenant))) {
     // filter access by selected tenant
     return {
       or: [

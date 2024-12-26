@@ -3,6 +3,8 @@ import type { CollectionAfterLoginHook } from 'payload'
 import { mergeHeaders } from '@payloadcms/next/utilities'
 import { generateCookie, getCookieExpiration } from 'payload'
 
+import { extractID } from '../../../utilities/extractID'
+
 export const setCookieBasedOnDomain: CollectionAfterLoginHook = async ({ req, user }) => {
   const relatedOrg = await req.payload.find({
     collection: 'tenants',
@@ -22,7 +24,7 @@ export const setCookieBasedOnDomain: CollectionAfterLoginHook = async ({ req, us
       expires: getCookieExpiration({ seconds: 7200 }),
       path: '/',
       returnCookieAsObject: false,
-      value: relatedOrg.docs[0].id,
+      value: String(extractID(relatedOrg.docs[0].id)),
     })
 
     // Merge existing responseHeaders with the new Set-Cookie header
