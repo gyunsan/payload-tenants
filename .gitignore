@@ -3,3 +3,7 @@ dist
 node_modules
 package-lock.json
 .env
+# Next.js
+.next/
+.next/cache/
+out/
