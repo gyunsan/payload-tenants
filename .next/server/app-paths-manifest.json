@@ -1,0 +1,7 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/(payload)/api/[...slug]/route": "app/(payload)/api/[...slug]/route.js",
+  "/(app)/[tenant]/login/page": "app/(app)/[tenant]/login/page.js",
+  "/(app)/[tenant]/page": "app/(app)/[tenant]/page.js",
+  "/(payload)/admin/[[...segments]]/page": "app/(payload)/admin/[[...segments]]/page.js"
+}
