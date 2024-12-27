@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url'
 import { Pages } from './collections/Pages'
 import { Tenants } from './collections/Tenants'
 import Users from './collections/Users'
+import Dictionary from './collections/Dictionary'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -19,7 +20,7 @@ export default buildConfig({
     },
     user: 'users',
   },
-  collections: [Pages, Users, Tenants],
+  collections: [Pages, Users, Tenants, Dictionary],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI as string,

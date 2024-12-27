@@ -14,6 +14,7 @@ export interface Config {
     pages: Page;
     users: User;
     tenants: Tenant;
+    dictionary: Dictionary;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -23,6 +24,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     tenants: TenantsSelect<false> | TenantsSelect<true>;
+    dictionary: DictionarySelect<false> | DictionarySelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -123,6 +125,35 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "dictionary".
+ */
+export interface Dictionary {
+  id: number;
+  /**
+   * The actual word or term
+   */
+  word: string;
+  /**
+   * The part of speech this word belongs to
+   */
+  partOfSpeech: 'noun' | 'verb' | 'adjective' | 'adverb' | 'pronoun' | 'preposition' | 'conjunction' | 'interjection';
+  /**
+   * A clear explanation of what the word means
+   */
+  definition: string;
+  /**
+   * An example sentence showing how to use this word
+   */
+  example?: string | null;
+  /**
+   * Phonetic spelling for pronunciation guidance
+   */
+  pronunciation?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -139,6 +170,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tenants';
         value: number | Tenant;
+      } | null)
+    | ({
+        relationTo: 'dictionary';
+        value: number | Dictionary;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -231,6 +266,19 @@ export interface TenantsSelect<T extends boolean = true> {
       };
   slug?: T;
   public?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "dictionary_select".
+ */
+export interface DictionarySelect<T extends boolean = true> {
+  word?: T;
+  partOfSpeech?: T;
+  definition?: T;
+  example?: T;
+  pronunciation?: T;
   updatedAt?: T;
   createdAt?: T;
 }
