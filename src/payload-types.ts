@@ -136,7 +136,16 @@ export interface Dictionary {
   /**
    * The part of speech this word belongs to
    */
-  partOfSpeech: 'noun' | 'verb' | 'adjective' | 'adverb' | 'pronoun' | 'preposition' | 'conjunction' | 'interjection';
+  partOfSpeech:
+    | 'noun'
+    | 'verb'
+    | 'verb/noun'
+    | 'adjective'
+    | 'adverb'
+    | 'pronoun'
+    | 'preposition'
+    | 'conjunction'
+    | 'interjection';
   /**
    * A clear explanation of what the word means
    */
@@ -149,6 +158,11 @@ export interface Dictionary {
    * Phonetic spelling for pronunciation guidance
    */
   pronunciation?: string | null;
+  /**
+   * Whether this dictionary entry is published
+   */
+  published?: boolean | null;
+  tenant: number | Tenant;
   updatedAt: string;
   createdAt: string;
 }
@@ -279,6 +293,8 @@ export interface DictionarySelect<T extends boolean = true> {
   definition?: T;
   example?: T;
   pronunciation?: T;
+  published?: T;
+  tenant?: T;
   updatedAt?: T;
   createdAt?: T;
 }

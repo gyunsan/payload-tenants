@@ -1,8 +1,22 @@
 import type { CollectionConfig } from 'payload'
+import { tenantField } from '../../fields/TenantField'
+import { baseListFilter } from './access/baseListFilter'
+import { canMutateDictionary } from './access/byTenant'
+import { readAccess } from './access/readAccess'
+
 const Dictionary: CollectionConfig = {
     slug: 'dictionary',
     admin: {
         useAsTitle: 'word',
+        baseListFilter,
+        listSearchableFields: ['word', 'definition'],
+        defaultColumns: ['word', 'partOfSpeech', 'published'],
+    },
+    access: {
+        create: canMutateDictionary,
+        delete: canMutateDictionary,
+        read: readAccess,
+        update: canMutateDictionary,
     },
     fields: [
         {
@@ -21,6 +35,7 @@ const Dictionary: CollectionConfig = {
             options: [
                 { label: 'Noun', value: 'noun' },
                 { label: 'Verb', value: 'verb' },
+                { label: 'Verb/Noun', value: 'verb/noun' },
                 { label: 'Adjective', value: 'adjective' },
                 { label: 'Adverb', value: 'adverb' },
                 { label: 'Pronoun', value: 'pronoun' },
@@ -56,6 +71,16 @@ const Dictionary: CollectionConfig = {
                 description: 'Phonetic spelling for pronunciation guidance',
             },
         },
+        {
+            name: 'published',
+            type: 'checkbox',
+            defaultValue: false,
+            admin: {
+                description: 'Whether this dictionary entry is published',
+                position: 'sidebar',
+            },
+        },
+        tenantField,
     ],
 };
 

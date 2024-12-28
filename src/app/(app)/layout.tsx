@@ -11,8 +11,8 @@ export const metadata = {
 // eslint-disable-next-line no-restricted-exports
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html className={baseClass} lang="en">
-      <body>{children}</body>
+    <html className={baseClass} lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>{children}</body>
     </html>
   )
 }
