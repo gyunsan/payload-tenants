@@ -34,7 +34,7 @@ export interface Config {
   };
   globals: {};
   globalsSelect: {};
-  locale: null;
+  locale: 'en' | 'bg';
   user: User & {
     collection: 'users';
   };
@@ -145,7 +145,16 @@ export interface Dictionary {
     | 'pronoun'
     | 'preposition'
     | 'conjunction'
-    | 'interjection';
+    | 'interjection'
+    | 'съществително'
+    | 'глагол'
+    | 'глагол/съществително'
+    | 'прилагателно'
+    | 'наречие'
+    | 'местоимение'
+    | 'предлог'
+    | 'съюз'
+    | 'междуметие';
   /**
    * A clear explanation of what the word means
    */

@@ -24,6 +24,7 @@ const Dictionary: CollectionConfig = {
             type: 'text',
             required: true,
             unique: true,
+            localized: true,
             admin: {
                 description: 'The actual word or term',
             },
@@ -32,6 +33,7 @@ const Dictionary: CollectionConfig = {
             name: 'partOfSpeech',
             type: 'select',
             required: true,
+            localized: true,
             options: [
                 { label: 'Noun', value: 'noun' },
                 { label: 'Verb', value: 'verb' },
@@ -42,6 +44,15 @@ const Dictionary: CollectionConfig = {
                 { label: 'Preposition', value: 'preposition' },
                 { label: 'Conjunction', value: 'conjunction' },
                 { label: 'Interjection', value: 'interjection' },
+                { label: 'Съществително име', value: 'съществително' },
+                { label: 'Глагол', value: 'глагол' },
+                { label: 'Глагол/Съществително', value: 'глагол/съществително' },
+                { label: 'Прилагателно', value: 'прилагателно' },
+                { label: 'Наречие', value: 'наречие' },
+                { label: 'Местоимение', value: 'местоимение' },
+                { label: 'Предлог', value: 'предлог' },
+                { label: 'Съюз', value: 'съюз' },
+                { label: 'Междуметие', value: 'междуметие' }
             ],
             admin: {
                 description: 'The part of speech this word belongs to',
@@ -51,6 +62,7 @@ const Dictionary: CollectionConfig = {
             name: 'definition',
             type: 'textarea',
             required: true,
+            localized: true,
             admin: {
                 description: 'A clear explanation of what the word means',
             },
@@ -59,6 +71,7 @@ const Dictionary: CollectionConfig = {
             name: 'example',
             type: 'textarea',
             required: false,
+            localized: true,
             admin: {
                 description: 'An example sentence showing how to use this word',
             },
@@ -75,6 +88,7 @@ const Dictionary: CollectionConfig = {
             name: 'published',
             type: 'checkbox',
             defaultValue: false,
+            localized: true,
             admin: {
                 description: 'Whether this dictionary entry is published',
                 position: 'sidebar',
