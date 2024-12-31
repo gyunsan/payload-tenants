@@ -15,9 +15,12 @@
     "seed": "npm run payload migrate:fresh",
     "status": "npm run payload migrate:status",
     "generate": "npm run payload migrate:create",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@heroicons/react": "^2.2.0",
     "@payloadcms/db-postgres": "^3.0.2",
     "@payloadcms/next": "latest",
     "@payloadcms/richtext-lexical": "latest",
@@ -25,17 +28,20 @@
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
+    "framer-motion": "^11.15.0",
     "graphql": "^16.9.0",
     "next": "^15.0.0",
     "payload": "latest",
     "qs-esm": "7.0.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-syntax-highlighter": "^15.6.1",
     "sharp": "0.32.6",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@payloadcms/eslint-config": "^3.9.0",
     "@payloadcms/graphql": "latest",
     "@swc/core": "^1.6.13",
     "@types/react": "19.0.1",

@@ -12,7 +12,7 @@ import Dictionary from './collections/Dictionary'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-// eslint-disable-next-line no-restricted-exports
+ 
 export default buildConfig({
   admin: {
     components: {

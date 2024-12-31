@@ -8,7 +8,7 @@ import React from 'react'
 
 import { RenderPage } from '../../../components/RenderPage'
 
-// eslint-disable-next-line no-restricted-exports
+ 
 export default async function Page({
   params: paramsPromise,
 }: {
@@ -45,29 +45,29 @@ export default async function Page({
 
   const slugConstraint: Where = slug
     ? {
-        slug: {
-          equals: slug.join('/'),
-        },
-      }
+      slug: {
+        equals: slug.join('/'),
+      },
+    }
     : {
-        or: [
-          {
-            slug: {
-              equals: '',
-            },
+      or: [
+        {
+          slug: {
+            equals: '',
           },
-          {
-            slug: {
-              equals: 'home',
-            },
+        },
+        {
+          slug: {
+            equals: 'home',
           },
-          {
-            slug: {
-              exists: false,
-            },
+        },
+        {
+          slug: {
+            exists: false,
           },
-        ],
-      }
+        },
+      ],
+    }
 
   const pageQuery = await payload.find({
     collection: 'pages',
