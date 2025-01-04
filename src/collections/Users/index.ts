@@ -22,6 +22,11 @@ const Users: CollectionConfig = {
   endpoints: [externalUsersLogin],
   fields: [
     {
+      name: 'name',
+      type: 'text',
+      required: true,
+    },
+    {
       name: 'roles',
       type: 'select',
       defaultValue: ['user'],

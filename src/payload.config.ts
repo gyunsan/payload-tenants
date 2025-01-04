@@ -8,11 +8,16 @@ import { Pages } from './collections/Pages'
 import { Tenants } from './collections/Tenants'
 import Users from './collections/Users'
 import Dictionary from './collections/Dictionary'
+import { Posts } from './collections/Posts'
+import { Categories } from './collections/Categories'
+import { Media } from './collections/Dictionary/Media'
+import { Forms } from './collections/Forms'
+import { Redirects } from './collections/Redirects'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
- 
+
 export default buildConfig({
   admin: {
     components: {
@@ -20,11 +25,13 @@ export default buildConfig({
     },
     user: 'users',
   },
-  collections: [Pages, Users, Tenants, Dictionary],
+  collections: [Pages, Users, Tenants, Dictionary, Posts, Categories, Media, Forms, Redirects],
+  globals: [],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI as string,
     },
+    migrationDir: path.resolve(dirname, './migrations'),
   }),
   editor: lexicalEditor({}),
   graphQL: {

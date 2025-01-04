@@ -5,6 +5,10 @@ import { baseListFilter } from './access/baseListFilter'
 import { canMutatePage } from './access/byTenant'
 import { readAccess } from './access/readAccess'
 import { ensureUniqueSlug } from './hooks/ensureUniqueSlug'
+import { Archive } from '../../blocks/ArchiveBlock/config'
+import { CallToAction } from '../../blocks/CallToAction/config'
+import { Content } from '../../blocks/Content/config'
+import { Code } from '../../blocks/Code/config'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -31,6 +35,11 @@ export const Pages: CollectionConfig = {
         beforeValidate: [ensureUniqueSlug],
       },
       index: true,
+    },
+    {
+      name: 'layout',
+      type: 'blocks',
+      blocks: [Archive, CallToAction, Content, Code],
     },
     tenantField,
   ],

@@ -18,18 +18,17 @@ export const TenantSelector = ({ initialCookie }: { initialCookie?: string }) =>
   const [options, setOptions] = React.useState<OptionObject[]>([])
 
   const isSuperAdmin = user?.roles?.includes('super-admin')
-  const tenantIDs =
-    user?.tenants?.map(({ tenant }) => {
-      if (tenant) {
-        if (typeof tenant === 'string') {
-          return tenant
-        }
-        if (typeof tenant === 'number') {
-          return String(tenant)
-        }
-        return String(extractID(tenant.id))
+  const tenantIDs = user?.tenants?.map(({ tenant }) => {
+    if (tenant) {
+      if (typeof tenant === 'string') {
+        return tenant
       }
-    }) || []
+      if (typeof tenant === 'number') {
+        return String(tenant)
+      }
+      return String(extractID(tenant.id))
+    }
+  }) || []
 
   function setCookie(name: string, value?: string) {
     const expires = '; expires=Fri, 31 Dec 9999 23:59:59 GMT'
@@ -47,6 +46,13 @@ export const TenantSelector = ({ initialCookie }: { initialCookie?: string }) =>
   }, [])
 
   React.useEffect(() => {
+    // If user has exactly one tenant, set it immediately
+    if (tenantIDs.length === 1 && !initialCookie) {
+      setCookie('payload-tenant', tenantIDs[0])
+      window.location.reload()
+      return
+    }
+
     const fetchTenants = async () => {
       const adminOfTenants = getTenantAdminTenantAccessIDs(user ?? null)
 
@@ -71,17 +77,13 @@ export const TenantSelector = ({ initialCookie }: { initialCookie?: string }) =>
       }).then((res) => res.json())
 
       const optionsToSet = res.docs.map((doc: Tenant) => ({ label: doc.name, value: doc.id }))
-
-      if (optionsToSet.length === 1) {
-        setCookie('payload-tenant', optionsToSet[0].value)
-      }
       setOptions(optionsToSet)
     }
 
     if (user) {
       void fetchTenants()
     }
-  }, [user])
+  }, [user, tenantIDs, initialCookie])
 
   if ((isSuperAdmin || tenantIDs.length > 1) && options.length > 1) {
     return (
