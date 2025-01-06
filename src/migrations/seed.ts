@@ -1,6 +1,6 @@
-import type { Payload } from 'payload'
+import type { MigrateUpArgs } from '@payloadcms/db-postgres'
 
-export const seed = async (payload: Payload): Promise<void> => {
+export const up = async ({ payload }: MigrateUpArgs): Promise<void> => {
   if (process.env.NODE_ENV === 'production') return
 
   await payload.create({
@@ -11,5 +11,19 @@ export const seed = async (payload: Payload): Promise<void> => {
       roles: ['super-admin'],
       name: 'Demo User',
     },
+  })
+}
+
+export const down = async ({ payload }: MigrateUpArgs): Promise<void> => {
+  // Add cleanup logic here if needed
+  if (process.env.NODE_ENV === 'production') return
+
+  await payload.delete({
+    collection: 'users',
+    where: {
+      email: {
+        equals: 'demo@payloadcms.com'
+      }
+    }
   })
 }

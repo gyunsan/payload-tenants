@@ -1,8 +1,9 @@
-import { seed } from './seed'
+import { up, down } from './seed'
 
 export default [
   {
     name: 'seed',
-    up: seed,
+    up,
+    down,
   },
 ]

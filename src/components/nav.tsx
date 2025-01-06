@@ -1,26 +1,7 @@
-import { Avatar } from '@/components/catalyst/avatar'
-import {
-    Dropdown,
-    DropdownButton,
-    DropdownDivider,
-    DropdownItem,
-    DropdownLabel,
-    DropdownMenu,
-} from '@/components/catalyst/dropdown'
 import { Navbar, NavbarDivider, NavbarItem, NavbarSection, NavbarSpacer } from '@/components/catalyst/navbar'
-import { Sidebar, SidebarBody, SidebarHeader, SidebarItem, SidebarLabel, SidebarSection } from '@/components/catalyst/sidebar'
+import { Sidebar, SidebarBody, SidebarItem, SidebarSection } from '@/components/catalyst/sidebar'
 import { StackedLayout } from '@/components/catalyst/stacked-layout'
-import {
-    ArrowRightStartOnRectangleIcon,
-    ChevronDownIcon,
-    Cog8ToothIcon,
-    LightBulbIcon,
-    PlusIcon,
-    ShieldCheckIcon,
-    UserIcon,
-    WrenchScrewdriverIcon
-} from '@heroicons/react/16/solid'
-import { InboxIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { MagnifyingGlassIcon, WrenchScrewdriverIcon } from '@heroicons/react/20/solid'
 import { ThemeSwitcher } from './theme-switcher'
 
 const navItems = [
