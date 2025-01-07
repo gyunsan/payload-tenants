@@ -29,6 +29,7 @@ import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { SlugComponent as SlugComponent_92cc057d0a2abb4f6cf0307edf59f986 } from '@/fields/slug/SlugComponent'
+import { ColorPickerField as ColorPickerField_602e470051be770e1d0b98b52dd6848e } from '@/fields/ColorPicker'
 import { TenantSelectorRSC as TenantSelectorRSC_9d7720c4b50db35595dfefa592fabd33 } from '@/components/TenantSelector'
 
 export const importMap = {
@@ -63,5 +64,6 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@/fields/slug/SlugComponent#SlugComponent": SlugComponent_92cc057d0a2abb4f6cf0307edf59f986,
+  "@/fields/ColorPicker#ColorPickerField": ColorPickerField_602e470051be770e1d0b98b52dd6848e,
   "@/components/TenantSelector#TenantSelectorRSC": TenantSelectorRSC_9d7720c4b50db35595dfefa592fabd33
 }

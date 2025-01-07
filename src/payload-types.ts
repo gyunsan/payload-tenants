@@ -21,6 +21,7 @@ export interface Config {
     forms: Form;
     redirects: Redirect;
     pricing: Pricing;
+    'ingredient-categories': IngredientCategory;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -37,6 +38,7 @@ export interface Config {
     forms: FormsSelect<false> | FormsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     pricing: PricingSelect<false> | PricingSelect<true>;
+    'ingredient-categories': IngredientCategoriesSelect<false> | IngredientCategoriesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -559,6 +561,47 @@ export interface Pricing {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ingredient-categories".
+ */
+export interface IngredientCategory {
+  id: number;
+  /**
+   * The name of the ingredient category
+   */
+  name: string;
+  /**
+   * Unique code identifier for the category
+   */
+  code: string;
+  /**
+   * A description of what this category includes
+   */
+  description?: string | null;
+  /**
+   * Image representing this category
+   */
+  image?: (number | null) | Media;
+  /**
+   * Parent category if this is a subcategory
+   */
+  parent?: (number | null) | IngredientCategory;
+  /**
+   * Color code for the category (e.g. #FF0000)
+   */
+  color?: string | null;
+  deletedAt?: string | null;
+  /**
+   * Whether this category is published
+   */
+  published?: boolean | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  tenant: number | Tenant;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -603,6 +646,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pricing';
         value: number | Pricing;
+      } | null)
+    | ({
+        relationTo: 'ingredient-categories';
+        value: number | IngredientCategory;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -987,6 +1034,25 @@ export interface PricingSelect<T extends boolean = true> {
         price?: T;
         timeInWeeks?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ingredient-categories_select".
+ */
+export interface IngredientCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  description?: T;
+  image?: T;
+  parent?: T;
+  color?: T;
+  deletedAt?: T;
+  published?: T;
+  slug?: T;
+  slugLock?: T;
+  tenant?: T;
   updatedAt?: T;
   createdAt?: T;
 }

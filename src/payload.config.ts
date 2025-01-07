@@ -14,6 +14,7 @@ import { Media } from './collections/Dictionary/Media'
 import { Forms } from './collections/Forms'
 import { Redirects } from './collections/Redirects'
 import Pricing from './collections/Pricing'
+import IngredientCategories from './collections/Ingredient Categories'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,7 +27,19 @@ export default buildConfig({
     },
     user: 'users',
   },
-  collections: [Pages, Users, Tenants, Dictionary, Posts, Categories, Media, Forms, Redirects, Pricing],
+  collections: [
+    Pages,
+    Users,
+    Tenants,
+    Dictionary,
+    Posts,
+    Categories,
+    Media,
+    Forms,
+    Redirects,
+    Pricing,
+    IngredientCategories,
+  ],
   globals: [],
   db: postgresAdapter({
     pool: {
