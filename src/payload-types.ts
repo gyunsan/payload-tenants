@@ -20,6 +20,7 @@ export interface Config {
     media: Media;
     forms: Form;
     redirects: Redirect;
+    pricing: Pricing;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -35,6 +36,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
+    pricing: PricingSelect<false> | PricingSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -514,6 +516,49 @@ export interface Redirect {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pricing".
+ */
+export interface Pricing {
+  id: number;
+  tenant: number | Tenant;
+  siteName: string;
+  siteDescription?: string | null;
+  tiers?:
+    | {
+        key: string;
+        title: string;
+        description?: string | null;
+        price?: number | null;
+        discountPercentage?: number | null;
+        isFeatured?: boolean | null;
+        isMostPopular?: boolean | null;
+        buttonText?: string | null;
+        buttonColor?: string | null;
+        buttonVariant?: string | null;
+        features?:
+          | {
+              name: string;
+              tooltip?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  addons?:
+    | {
+        id: string | null;
+        name: string;
+        description?: string | null;
+        price?: number | null;
+        timeInWeeks?: number | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -554,6 +599,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'redirects';
         value: number | Redirect;
+      } | null)
+    | ({
+        relationTo: 'pricing';
+        value: number | Pricing;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -895,6 +944,48 @@ export interface RedirectsSelect<T extends boolean = true> {
         type?: T;
         url?: T;
         reference?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pricing_select".
+ */
+export interface PricingSelect<T extends boolean = true> {
+  tenant?: T;
+  siteName?: T;
+  siteDescription?: T;
+  tiers?:
+    | T
+    | {
+        key?: T;
+        title?: T;
+        description?: T;
+        price?: T;
+        discountPercentage?: T;
+        isFeatured?: T;
+        isMostPopular?: T;
+        buttonText?: T;
+        buttonColor?: T;
+        buttonVariant?: T;
+        features?:
+          | T
+          | {
+              name?: T;
+              tooltip?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  addons?:
+    | T
+    | {
+        id?: T;
+        name?: T;
+        description?: T;
+        price?: T;
+        timeInWeeks?: T;
       };
   updatedAt?: T;
   createdAt?: T;
