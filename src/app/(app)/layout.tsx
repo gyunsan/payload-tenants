@@ -13,17 +13,19 @@ export const metadata = {
   title: 'Sapi Dev',
 }
 
- 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-
   return (
     <html lang="en" suppressHydrationWarning className={cn(inter.className, 'min-h-screen bg-background')}>
       <body suppressHydrationWarning className="bg-background text-foreground">
         <ThemeProvider defaultTheme="system" storageKey="app-theme">
-          <Nav>
-            {children}
-            <Footer />
-          </Nav>
+          <div className="min-h-screen flex flex-col">
+            <Nav>
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </Nav>
+          </div>
         </ThemeProvider>
       </body>
     </html>

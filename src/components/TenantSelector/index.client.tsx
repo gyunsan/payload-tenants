@@ -16,6 +16,7 @@ import './index.scss'
 export const TenantSelector = ({ initialCookie }: { initialCookie?: string }) => {
   const { user } = useAuth<User>()
   const [options, setOptions] = React.useState<OptionObject[]>([])
+  const [mounted, setMounted] = React.useState(false)
 
   const isSuperAdmin = user?.roles?.includes('super-admin')
   const tenantIDs = user?.tenants?.map(({ tenant }) => {
@@ -28,7 +29,8 @@ export const TenantSelector = ({ initialCookie }: { initialCookie?: string }) =>
       }
       return String(extractID(tenant.id))
     }
-  }) || []
+    return undefined
+  }).filter(Boolean)
 
   function setCookie(name: string, value?: string) {
     const expires = '; expires=Fri, 31 Dec 9999 23:59:59 GMT'
@@ -46,8 +48,12 @@ export const TenantSelector = ({ initialCookie }: { initialCookie?: string }) =>
   }, [])
 
   React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  React.useEffect(() => {
     // If user has exactly one tenant, set it immediately
-    if (tenantIDs.length === 1 && !initialCookie) {
+    if (tenantIDs && tenantIDs.length === 1 && !initialCookie) {
       setCookie('payload-tenant', tenantIDs[0])
       window.location.reload()
       return
@@ -80,14 +86,18 @@ export const TenantSelector = ({ initialCookie }: { initialCookie?: string }) =>
       setOptions(optionsToSet)
     }
 
-    if (user) {
+    if (user && options?.length === 0) {
       void fetchTenants()
     }
-  }, [user, tenantIDs, initialCookie])
+  }, [user, options, tenantIDs, initialCookie])
 
-  if ((isSuperAdmin || tenantIDs.length > 1) && options.length > 1) {
+  if (!mounted) {
+    return null
+  }
+
+  if ((isSuperAdmin || (tenantIDs && tenantIDs.length > 1)) && options?.length > 1) {
     return (
-      <div className="tenant-selector">
+      <div className="tenant-selector" suppressHydrationWarning>
         <SelectInput
           label="Select a tenant"
           name="setTenant"

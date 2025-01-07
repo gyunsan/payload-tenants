@@ -23,7 +23,7 @@ const initialState: ThemeProviderState = {
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
 const getThemeFromStorage = (key: string, fallback: Theme): Theme => {
-    if (typeof window === 'undefined') {return fallback}
+    if (typeof window === 'undefined') { return fallback }
     try {
         const value = localStorage.getItem(key)
         return (value as Theme) || fallback
@@ -50,7 +50,7 @@ export function ThemeProvider({
     }, [defaultTheme, storageKey])
 
     useEffect(() => {
-        if (!mounted) {return}
+        if (!mounted) { return }
 
         const root = window.document.documentElement
         root.classList.remove('light', 'dark')
@@ -81,21 +81,26 @@ export function ThemeProvider({
 
     // Prevent flash of incorrect theme
     if (!mounted) {
-        return <>{children}</>
+        return (
+            <div suppressHydrationWarning style={{ visibility: 'hidden' }}>
+                {children}
+            </div>
+        )
     }
 
     return (
-        <ThemeProviderContext.Provider {...props} value={value}>
-            {children}
-        </ThemeProviderContext.Provider>
+        <div suppressHydrationWarning>
+            <ThemeProviderContext.Provider {...props} value={value}>
+                {children}
+            </ThemeProviderContext.Provider>
+        </div>
     )
 }
 
 export const useTheme = () => {
     const context = useContext(ThemeProviderContext)
 
-    if (context === undefined)
-        {throw new Error('useTheme must be used within a ThemeProvider')}
+    if (context === undefined) { throw new Error('useTheme must be used within a ThemeProvider') }
 
     return context
 } 

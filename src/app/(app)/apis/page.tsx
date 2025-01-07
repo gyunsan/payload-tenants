@@ -6,11 +6,11 @@ import { Heading } from '@/components/catalyst/heading'
 import { Input, InputGroup } from '@/components/catalyst/input'
 import { Link } from '@/components/catalyst/link'
 import { Select } from '@/components/catalyst/select'
-import { getEvents } from '@/data'
 import { EllipsisVerticalIcon, MagnifyingGlassIcon } from '@heroicons/react/16/solid'
 import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: 'Events',
@@ -81,10 +81,12 @@ export default async function Tenants() {
                       const pageTenant = page.tenant
                       return typeof pageTenant === 'number' ? pageTenant === tenant.id : pageTenant?.id === tenant.id
                     })?.slug || ''}`} aria-hidden="true">
-                      <img
+                      <Image
+                        width={128}
+                        height={128}
                         className="aspect-[3/2] rounded-lg shadow ring-1 ring-zinc-900/5 dark:ring-white/10"
                         src={`/teams/${tenant.slug}.svg`}
-                        alt=""
+                        alt={tenant.name}
                       />
                     </Link>
                   </div>
