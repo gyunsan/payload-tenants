@@ -7,6 +7,20 @@ import {
   HorizontalRuleFeature,
   InlineToolbarFeature,
   lexicalEditor,
+  BoldFeature,
+  ItalicFeature,
+  UnderlineFeature,
+  StrikethroughFeature,
+  SubscriptFeature,
+  SuperscriptFeature,
+  AlignFeature,
+  IndentFeature,
+  LinkFeature,
+  UnorderedListFeature,
+  OrderedListFeature,
+  ParagraphFeature,
+  UploadFeature,
+  InlineCodeFeature,
 } from '@payloadcms/richtext-lexical'
 
 import { tenantField } from '../../fields/TenantField'
@@ -76,11 +90,38 @@ export const Posts: CollectionConfig<'posts'> = {
                 features: ({ rootFeatures }) => {
                   return [
                     ...rootFeatures,
-                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }),
                     BlocksFeature({ blocks: [Banner, Code, MediaBlock] }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),
+                    BoldFeature(),
+                    ItalicFeature(),
+                    UnderlineFeature(),
+                    StrikethroughFeature(),
+                    SubscriptFeature(),
+                    SuperscriptFeature(),
+                    AlignFeature(),
+                    IndentFeature(),
+                    LinkFeature({
+                      enabledCollections: ['pages', 'posts', 'media'],
+                    }),
+                    UnorderedListFeature(),
+                    OrderedListFeature(),
+                    ParagraphFeature(),
+                    UploadFeature({
+                      collections: {
+                        media: {
+                          fields: [
+                            {
+                              name: 'caption',
+                              type: 'richText',
+                            },
+                          ],
+                        },
+                      },
+                    }),
+                    InlineCodeFeature(),
                   ]
                 },
               }),
