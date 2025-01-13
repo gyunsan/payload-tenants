@@ -22,6 +22,8 @@ export interface Config {
     redirects: Redirect;
     pricing: Pricing;
     'ingredient-categories': IngredientCategory;
+    animals: Animal;
+    'allergies-and-intolerances': AllergiesAndIntolerance;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -39,6 +41,8 @@ export interface Config {
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     pricing: PricingSelect<false> | PricingSelect<true>;
     'ingredient-categories': IngredientCategoriesSelect<false> | IngredientCategoriesSelect<true>;
+    animals: AnimalsSelect<false> | AnimalsSelect<true>;
+    'allergies-and-intolerances': AllergiesAndIntolerancesSelect<false> | AllergiesAndIntolerancesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -190,8 +194,16 @@ export interface Post {
     image?: (number | null) | Media;
     description?: string | null;
   };
+  /**
+   * Whether this item is published
+   */
+  published?: boolean | null;
+  /**
+   * Tags to help categorize and search
+   */
+  tags?: string[] | null;
   publishedAt?: string | null;
-  authors?: (number | User)[] | null;
+  authors: (number | User)[];
   populatedAuthors?:
     | {
         id?: string | null;
@@ -602,6 +614,105 @@ export interface IngredientCategory {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "animals".
+ */
+export interface Animal {
+  id: number;
+  /**
+   * The species of the animal (e.g., Dog, Cat, Bird)
+   */
+  species: string;
+  /**
+   * The breed of the animal if applicable (e.g., Golden Retriever, Persian)
+   */
+  breed?: string | null;
+  /**
+   * A description of the animal
+   */
+  description?: string | null;
+  /**
+   * Whether this animal entry is published
+   */
+  published?: boolean | null;
+  /**
+   * Upload images of the animal
+   */
+  images?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  tenant: number | Tenant;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "allergies-and-intolerances".
+ */
+export interface AllergiesAndIntolerance {
+  id: number;
+  /**
+   * The name of the allergy or intolerance
+   */
+  name: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  /**
+   * Whether this item is published
+   */
+  published?: boolean | null;
+  /**
+   * Authors of this content
+   */
+  authors: (number | User)[];
+  /**
+   * Tags to help categorize and search
+   */
+  tags?: string[] | null;
+  /**
+   * Whether this is a common allergy or intolerance
+   */
+  isCommon?: boolean | null;
+  deletedAt?: string | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  tenant: number | Tenant;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -650,6 +761,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'ingredient-categories';
         value: number | IngredientCategory;
+      } | null)
+    | ({
+        relationTo: 'animals';
+        value: number | Animal;
+      } | null)
+    | ({
+        relationTo: 'allergies-and-intolerances';
+        value: number | AllergiesAndIntolerance;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -859,6 +978,8 @@ export interface PostsSelect<T extends boolean = true> {
         image?: T;
         description?: T;
       };
+  published?: T;
+  tags?: T;
   publishedAt?: T;
   authors?: T;
   populatedAuthors?:
@@ -1055,6 +1176,58 @@ export interface IngredientCategoriesSelect<T extends boolean = true> {
   tenant?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "animals_select".
+ */
+export interface AnimalsSelect<T extends boolean = true> {
+  species?: T;
+  breed?: T;
+  description?: T;
+  published?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  tenant?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "allergies-and-intolerances_select".
+ */
+export interface AllergiesAndIntolerancesSelect<T extends boolean = true> {
+  name?: T;
+  content?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  published?: T;
+  authors?: T;
+  tags?: T;
+  isCommon?: T;
+  deletedAt?: T;
+  populatedAuthors?:
+    | T
+    | {
+        id?: T;
+        name?: T;
+      };
+  slug?: T;
+  slugLock?: T;
+  tenant?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

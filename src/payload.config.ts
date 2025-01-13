@@ -15,10 +15,11 @@ import { Forms } from './collections/Forms'
 import { Redirects } from './collections/Redirects'
 import Pricing from './collections/Pricing'
 import IngredientCategories from './collections/Ingredient Categories'
+import Animals from './collections/Animals'
+import AllergiesAndIntolerances from './collections/AllergiesAndIntolerances'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
-
 
 export default buildConfig({
   admin: {
@@ -39,6 +40,8 @@ export default buildConfig({
     Redirects,
     Pricing,
     IngredientCategories,
+    Animals,
+    AllergiesAndIntolerances,
   ],
   globals: [],
   db: postgresAdapter({

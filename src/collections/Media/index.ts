@@ -4,7 +4,8 @@ import { fileURLToPath } from 'url'
 
 import { tenantField } from '../../fields/TenantField'
 import { baseListFilter } from './access/baseListFilter'
-import { canMutateMedia, filterByTenantRead } from './access/byTenant'
+import { canMutateMedia } from './access/byTenant'
+import { readAccess } from './access/readAccess'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -18,11 +19,11 @@ export const Media: CollectionConfig = {
     access: {
         create: canMutateMedia,
         delete: canMutateMedia,
-        read: filterByTenantRead,
+        read: readAccess,
         update: canMutateMedia,
     },
     upload: {
-        staticDir: path.resolve(dirname, '../../public/media'),
+        staticDir: path.resolve(dirname, '../../../public/media'),
         adminThumbnail: 'thumbnail',
         mimeTypes: ['image/*'],
         imageSizes: [
@@ -46,6 +47,7 @@ export const Media: CollectionConfig = {
             },
         ],
     },
+    timestamps: true,
     fields: [
         {
             name: 'alt',
@@ -53,6 +55,13 @@ export const Media: CollectionConfig = {
             required: true,
             localized: true,
         },
+        {
+            name: 'caption',
+            type: 'richText',
+            localized: true,
+        },
         tenantField,
     ],
-} 
+}
+
+export default Media 

@@ -1,7 +1,18 @@
 import type { CollectionConfig } from 'payload'
-
+import { tenantField } from '../../fields/TenantField'
+import { baseListFilter } from './access/baseListFilter'
+import { canMutateDictionary } from './access/byTenant'
+import { readAccess } from './access/readAccess'
+import { slugField } from '@/fields/slug'
+import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import {
-  BlocksFeature,
+  MetaDescriptionField,
+  MetaImageField,
+  MetaTitleField,
+  OverviewField,
+  PreviewField,
+} from '@payloadcms/plugin-seo/fields'
+import {
   FixedToolbarFeature,
   HeadingFeature,
   HorizontalRuleFeature,
@@ -22,66 +33,48 @@ import {
   UploadFeature,
   InlineCodeFeature,
 } from '@payloadcms/richtext-lexical'
-
-import { tenantField } from '../../fields/TenantField'
-import { baseListFilter } from './access/baseListFilter'
-import { canMutatePost, filterByTenantRead } from './access/byTenant'
-import { Banner } from '../../blocks/Banner/config'
-import { Code } from '../../blocks/Code/config'
-import { MediaBlock } from '../../blocks/MediaBlock/config'
-import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 
-import {
-  MetaDescriptionField,
-  MetaImageField,
-  MetaTitleField,
-  OverviewField,
-  PreviewField,
-} from '@payloadcms/plugin-seo/fields'
-import { slugField } from '@/fields/slug'
-
-export const Posts: CollectionConfig<'posts'> = {
-  slug: 'posts',
-  access: {
-    create: canMutatePost,
-    delete: canMutatePost,
-    read: filterByTenantRead,
-    update: canMutatePost,
-  },
+const AllergiesAndIntolerances: CollectionConfig = {
+  slug: 'allergies-and-intolerances',
   admin: {
-    defaultColumns: ['title', 'slug', 'updatedAt'],
+    useAsTitle: 'name',
     baseListFilter,
-    useAsTitle: 'title',
+    listSearchableFields: ['name'],
+    defaultColumns: ['name', 'isCommon', 'createdAt', 'updatedAt'],
+    preview: (data, { req }) =>
+      generatePreviewPath({
+        slug: typeof data?.slug === 'string' ? data.slug : '',
+        collection: 'allergies-and-intolerances',
+        req,
+      }),
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
           slug: typeof data?.slug === 'string' ? data.slug : '',
-          collection: 'posts',
+          collection: 'allergies-and-intolerances',
           req,
         })
-
         return path
       },
     },
-    preview: (data, { req }) =>
-      generatePreviewPath({
-        slug: typeof data?.slug === 'string' ? data.slug : '',
-        collection: 'posts',
-        req,
-      }),
   },
   fields: [
     {
-      name: 'title',
+      name: 'name',
       type: 'text',
       required: true,
+      localized: true,
+      admin: {
+        description: 'The name of the allergy or intolerance',
+      },
     },
     {
       type: 'tabs',
       tabs: [
         {
+          label: 'Content',
           fields: [
             {
               name: 'content',
@@ -91,7 +84,6 @@ export const Posts: CollectionConfig<'posts'> = {
                   return [
                     ...rootFeatures,
                     HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }),
-                    BlocksFeature({ blocks: [Banner, Code, MediaBlock] }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),
@@ -129,37 +121,6 @@ export const Posts: CollectionConfig<'posts'> = {
               required: true,
             },
           ],
-          label: 'Content',
-        },
-        {
-          fields: [
-            {
-              name: 'relatedPosts',
-              type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
-              filterOptions: ({ id }) => {
-                return {
-                  id: {
-                    not_in: [id],
-                  },
-                }
-              },
-              hasMany: true,
-              relationTo: 'posts',
-            },
-            {
-              name: 'categories',
-              type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
-              hasMany: true,
-              relationTo: 'categories',
-            },
-          ],
-          label: 'Meta',
         },
         {
           name: 'meta',
@@ -196,6 +157,18 @@ export const Posts: CollectionConfig<'posts'> = {
       },
     },
     {
+      name: 'authors',
+      type: 'relationship',
+      admin: {
+        position: 'sidebar',
+        description: 'Authors of this content',
+      },
+      hasMany: true,
+      relationTo: 'users',
+      defaultValue: ({ user }) => user ? [user.id] : undefined,
+      required: true,
+    },
+    {
       name: 'tags',
       type: 'text',
       hasMany: true,
@@ -205,35 +178,22 @@ export const Posts: CollectionConfig<'posts'> = {
       },
     },
     {
-      name: 'publishedAt',
-      type: 'date',
+      name: 'isCommon',
+      type: 'checkbox',
+      defaultValue: false,
       admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-        },
+        description: 'Whether this is a common allergy or intolerance',
         position: 'sidebar',
-      },
-      hooks: {
-        beforeChange: [
-          ({ siblingData, value }) => {
-            if (siblingData._status === 'published' && !value) {
-              return new Date()
-            }
-            return value
-          },
-        ],
       },
     },
     {
-      name: 'authors',
-      type: 'relationship',
+      name: 'deletedAt',
+      type: 'date',
       admin: {
         position: 'sidebar',
+        readOnly: true,
+        hidden: true,
       },
-      hasMany: true,
-      relationTo: 'users',
-      defaultValue: ({ user }) => user ? [user.id] : undefined,
-      required: true,
     },
     {
       name: 'populatedAuthors',
@@ -256,20 +216,28 @@ export const Posts: CollectionConfig<'posts'> = {
         },
       ],
     },
-    ...slugField(),
+    ...slugField('name'),
     tenantField,
   ],
+  timestamps: true,
+  versions: {
+    drafts: {
+      autosave: {
+        interval: 2000,
+      },
+    },
+  },
   hooks: {
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
   },
-  versions: {
-    drafts: {
-      autosave: {
-        interval: 100,
-      },
-    },
-    maxPerDoc: 50,
+  access: {
+    create: canMutateDictionary,
+    delete: canMutateDictionary,
+    read: readAccess,
+    update: canMutateDictionary,
   },
-}
+};
+
+export default AllergiesAndIntolerances;
