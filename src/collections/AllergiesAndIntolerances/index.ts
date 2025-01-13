@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { tenantField } from '../../fields/TenantField'
 import { baseListFilter } from './access/baseListFilter'
-import { canMutateDictionary } from './access/byTenant'
+import { canMutateAllergiesAndIntolerances } from './access/byTenant'
 import { readAccess } from './access/readAccess'
 import { slugField } from '@/fields/slug'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
@@ -233,10 +233,10 @@ const AllergiesAndIntolerances: CollectionConfig = {
     afterDelete: [revalidateDelete],
   },
   access: {
-    create: canMutateDictionary,
-    delete: canMutateDictionary,
+    create: canMutateAllergiesAndIntolerances,
+    delete: canMutateAllergiesAndIntolerances,
     read: readAccess,
-    update: canMutateDictionary,
+    update: canMutateAllergiesAndIntolerances,
   },
 };
 

@@ -13,10 +13,7 @@ export const filterByTenantRead: Access = (args) => {
     const selectedTenant = cookies.get('payload-tenant')
     const tenantAccessIDs = getTenantAccessIDs(req.user)
 
-    // First check for manually selected tenant from cookies
     if (selectedTenant) {
-        // If it's a super admin,
-        // give them read access to only dictionary entries for that tenant
         if (superAdmin) {
             return {
                 tenant: {
@@ -27,8 +24,6 @@ export const filterByTenantRead: Access = (args) => {
 
         const hasTenantAccess = tenantAccessIDs.some((id) => String(extractID(id)) === selectedTenant)
 
-        // If NOT super admin,
-        // give them access only if they have access to tenant ID set in cookie
         if (hasTenantAccess) {
             return {
                 tenant: {
@@ -38,15 +33,10 @@ export const filterByTenantRead: Access = (args) => {
         }
     }
 
-    // If no manually selected tenant,
-    // but it is a super admin, give access to all
     if (superAdmin) {
         return true
     }
 
-    // If not super admin,
-    // but has access to tenants,
-    // give access to only their own tenants
     if (tenantAccessIDs.length) {
         return {
             tenant: {
@@ -55,11 +45,10 @@ export const filterByTenantRead: Access = (args) => {
         }
     }
 
-    // Deny access to all others
     return false
 }
 
-export const canMutateDictionary: Access = (args) => {
+export const canMutateAllergiesAndIntolerances: Access = (args) => {
     const req = args.req
     const superAdmin = isSuperAdmin(args)
 
@@ -67,7 +56,6 @@ export const canMutateDictionary: Access = (args) => {
         return false
     }
 
-    // super admins can mutate dictionary entries for any tenant
     if (superAdmin) {
         return true
     }
@@ -75,8 +63,6 @@ export const canMutateDictionary: Access = (args) => {
     const cookies = parseCookies(req.headers)
     const selectedTenant = cookies.get('payload-tenant')
 
-    // tenant admins can add/delete/update
-    // dictionary entries they have access to
     return (
         req.user?.tenants?.reduce((hasAccess: boolean, accessRow) => {
             if (hasAccess) {
