@@ -3,7 +3,8 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
-
+import { s3Storage } from '@payloadcms/storage-s3'
+import { MediaWithPrefix } from './collections/MediaWithPrefix'
 import { Pages } from './collections/Pages'
 import { Tenants } from './collections/Tenants'
 import Users from './collections/Users'
@@ -44,6 +45,28 @@ export default buildConfig({
     AllergiesAndIntolerances,
   ],
   globals: [],
+  plugins: [
+    s3Storage({
+      collections: {
+        media: {
+          prefix: 'media',
+        },
+        [MediaWithPrefix.slug]: {
+          prefix: 'media-with-prefix',
+        },
+      },
+      bucket: process.env.R2_BUCKET || '',
+      config: {
+        endpoint: process.env.R2_URL_KEY || '',
+        forcePathStyle: true,
+        region: 'auto',
+        credentials: {
+          accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
+        },
+      },
+    }),
+  ],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI as string,
